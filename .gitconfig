@@ -1,0 +1,60 @@
+[user]
+   name  = mcmd1962
+   email = mcmd1962@
+
+
+[color]
+   branch = true
+   ui     = true
+   diff   = true
+   status = true
+
+[alias]
+   alias = config --get-regexp alias
+   s  = status
+   st = status
+   ci = commit
+   co = checkout
+   #ls = branch -a
+   #oops = reset --soft HEAD~1
+   #rh = reset --hard
+   #save = stash save
+   #pop = stash pop --index
+   gui = !sh -c '/usr/local/git/libexec/git-core/git-gui'
+   lg = ! git log --graph --abbrev-commit --decorate --date=relative --format=tformat:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all | tac
+   lg1 = ! git log --graph --abbrev-commit --decorate --date=relative --format=tformat:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all | head -30 | tac
+   lg2 = ! git log --graph --abbrev-commit --decorate --format=tformat:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all | tac
+   deleted = log --diff-filter=D --summary
+   ls =  log  --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]"       --decorate
+   ll =  log  --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]"       --decorate --numstat
+   lds = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]"  --decorate --date=short
+   ld  = log  --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
+   le  = log                                                                        --decorate --oneline
+   fl  = log -u
+   dl  = "!git ll -1"
+   dlc = diff --cached HEAD^
+   # Full content of a revision
+   dr  = "!f() { git diff "$1"^.."$1"; }; f"
+   lc  = "!f() { git ll "$1"^.."$1"; }; f"
+   diffr  = "!f() { git diff "$1"^.."$1"; }; f"
+   # Find file path
+   f = "!git ls-files | grep -i"
+   # Find string
+   gr = grep -Ii
+
+
+[advice]
+   pushNonFastForward = false
+   statusHints        = false
+   commitBeforeMerge  = false
+   resolveConflict    = false
+   implicitIdentity   = false
+   detachedHead       = false
+
+[help]
+   autocorrect = 1
+
+[core]
+   pager = 
+[push]
+	default = simple

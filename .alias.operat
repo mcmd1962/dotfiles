@@ -1,0 +1,12 @@
+[ -d ~operat/log ]  &&  {
+
+   lsof () {
+      sudo /usr/sbin/lsof $@
+   }
+
+   osudo () {
+      sudo -H -u operat $@
+   }
+
+}
+

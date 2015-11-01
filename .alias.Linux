@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# Linux aliases/functions
+
+alias sttyset='stty 2100:5:bf:8a3b:7f:1c:8:15:4:0:1:0:11:13:1a:ff:12:f:17:16:ff:0:2f:0:0:0:0:0:0:0:0:0:0:0:0:0'
+alias view="vim -R"
+alias up="cd .."
+alias upp="cd ..; pwd"
+alias PS='ps -e -ouser:18,pid,ppid,c,stime,tty,time,psr,cmd'
+alias ps2='ps --ppid 2 -p 2 --deselect -ouser:18,pid,ppid,c,stime,tty,time,psr,cmd  --forest'
+alias psu='ps -ouser:18,pid,ppid,c,stime,tty,time,psr,cmd  --forest'
+alias gitroot='cd $( git rev-parse  --show-toplevel  ||  echo . ); pwd'
+
+#ulimit -S -c unlimited
+
+
+function sus {
+
+    perl  -ne '
+
+BEGIN {
+   my %data;
+}
+
+$data{$_} += 1;
+
+END  {
+   my $max = 0;
+   foreach my $line (keys %data)  {
+      $max = $data{$line}  if $data{$line} > $max;
+   }
+   $max = 1  if $max == 0;
+   my $nrdigits = int(log($max) / log(10)) + 1;
+
+   foreach my $line (sort { $data{$a} <=> $data{$b} } keys %data)  {
+      printf "%${nrdigits}d  %s",$data{$line}, $line;
+   }
+}
+'
+}
+
+
+gdb_get_backtrace() {
+    local exe=$1
+    local core=$2
+
+    gdb ${exe} \
+        --core ${core} \
+        --batch \
+        --quiet \
+        -ex "thread apply all bt full" \
+        -ex "quit"
+}

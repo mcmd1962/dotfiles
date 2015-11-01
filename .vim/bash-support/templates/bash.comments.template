@@ -1,0 +1,97 @@
+§%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== comment.end-of-line-comment == append ==
+# <CURSOR>
+§%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== comment.frame ==
+#-------------------------------------------------------------------------------
+#  <CURSOR>
+#-------------------------------------------------------------------------------
+§%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== comment.function ==
+#===  FUNCTION  ================================================================
+#          NAME:  |?FUNCTION_NAME|
+#   DESCRIPTION:  <CURSOR>
+#    PARAMETERS:  
+#       RETURNS:  
+#===============================================================================
+§%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== comment.file-description == start ==
+#!/bin/bash -
+# vim: set autoindent filetype=sh tabstop=3 shiftwidth=3 softtabstop=3 number textwidth=175 expandtab:
+#===============================================================================
+#
+#          FILE:  |FILENAME|
+#
+#         USAGE:  ./|FILENAME|
+#
+#   DESCRIPTION:  <CURSOR>
+#
+#       OPTIONS:  ---
+#  REQUIREMENTS:  ---
+#          BUGS:  ---
+#         NOTES:  ---
+#        AUTHOR:  |AUTHOR| (|AUTHORREF|), |EMAIL|
+#       COMPANY:  |COMPANY|
+#       CREATED:  |DATE| |TIME|
+#  DEPENDENCIES:
+#      REVISION:  ---
+#
+#       HISTORY:
+#                 + |DATE|/|AUTHORREF|: Creation of this script.
+#===============================================================================
+
+
+#===  INITIALIZATION  ==========================================================
+set -o nounset                                  # treat unset variables as errors
+
+PATH=/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin
+declare -rx ScriptName=${0##*/}             # the name of this script
+declare -rx ScriptVersion="1.0"             # the version of this script
+
+USAGE="
+
+  Usage :  ${0##/*/} [options] [--]
+
+  Options:
+  -h|help       Display this message
+  -v|version    Display script version
+
+"
+
+#===  Handle command line arguments  ===========================================
+while getopts ":hv" opt
+do
+  case $opt in
+
+    h|help     ) usage;                                                    exit 0;  ;;
+    v|version  ) echo "$0 -- Version $ScriptVersion";                      exit 0;  ;;
+    \?         ) echo -e "\n  Option does not exist : $OPTARG\n";  usage;  exit 1;  ;;
+
+  esac    # --- end of case ---
+done
+shift $(($OPTIND-1))
+
+
+#===============================================================================
+#   MAIN SCRIPT
+#===============================================================================
+
+#===============================================================================
+#   STATISTICS / CLEANUP
+#===============================================================================
+exit 0
+
+§%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== comment.keyword-bug == append ==
+ # :BUG:|DATE| |TIME|:|AUTHORREF|: <CURSOR>
+== comment.keyword-todo == append ==
+ # :TODO:|DATE| |TIME|:|AUTHORREF|: <CURSOR>
+== comment.keyword-tricky == append ==
+ # :TRICKY:|DATE| |TIME|:|AUTHORREF|: <CURSOR>
+== comment.keyword-warning == append ==
+ # :WARNING:|DATE| |TIME|:|AUTHORREF|: <CURSOR>
+== comment.keyword-workaround == append ==
+ # :WORKAROUND:|DATE| |TIME|:|AUTHORREF|: <CURSOR>
+== comment.keyword-keyword == append ==
+ # :|?KEYWORD:u|:|DATE| |TIME|:|AUTHORREF|: <CURSOR>
+§%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

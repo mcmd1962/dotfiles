@@ -1,0 +1,146 @@
+# turn everything in $HOME/bin directory to an alias
+#if [ -d $HOME/bin ]
+#then
+#   for F in `cd $HOME/bin; file * | egrep  executable | awk -F':' '{print $1}'`
+#   do
+#      alias $F=$HOME/bin/$F
+#   done
+#fi
+
+# add this configuration to ~/.bashrc
+export HH_CONFIG=hicolor         # get more colors
+# if this is interactive shell, then bind hh to Ctrl-r (for Vi mode check doc)
+if [[ $- =~ .*i.* ]]; then bind '"\C-t": "\C-a   history -a; history -n; hh \C-j"'; fi
+
+alias -- -='cd -'
+alias timeit='/usr/bin/time -f "Elapsed time: %E (= %e seconds)"'
+
+
+# messages
+alias cm="sudo cat     /var/log/messages"
+alias gm="sudo cat     /var/log/messages  |  egrep --color"
+alias lm="sudo less    /var/log/messages"
+alias lmf="sudo cat    /var/log/messages  |  less"
+alias tm="sudo tail -f /var/log/messages"
+
+alias cm1="sudo cat     /var/log/messages.1"
+alias gm1="sudo cat     /var/log/messages.1  |  egrep --color"
+alias lm1="sudo less    /var/log/messages.1"
+alias lm1f="sudo cat    /var/log/messages.1  |  less"
+alias tm1="sudo tail -f /var/log/messages.1"
+
+alias mutt="mutt -R"
+
+alias l='ls -C'
+alias la='ls -A'
+alias ll='ls -Al'
+alias ls='ls --color=auto'
+
+alias df='df -k'
+
+if type less > /dev/null 2>&1; then
+    alias more='less -c'
+    alias More='\more'
+    alias pg='less -c'
+    alias Pg='\pg'
+    alias man='PAGER="less -cI" man'
+    alias Man='\man'
+    PAGER=less
+    LESS="-R -M -n"
+    export PAGER LESS
+else
+    unalias pg
+    unalias Pg
+    unset PAGER
+    unalias man
+fi
+
+alias gitd="git diff HEAD..HEAD^"
+gitl ()  {
+   while [[ $# -gt 0 ]];  do
+      FILE="$1"
+      [[ ! -f "$FILE" ]] && {
+          echo ERROR: File $FILE not found or is not a regular file
+          continue
+      }
+      git log --graph --abbrev-commit --decorate --format=tformat:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all  -n 18  $FILE
+      echo ....
+      echo
+      shift
+   done
+}
+
+svnl () {
+
+   HEADLINES=7
+   [[ ! -e $1  &&  ${1%%.*} -ge 1 ]]  &&  {
+      HEADLINES=${1-7}
+      shift
+   }
+
+   while [[ $# -gt 0 ]];  do
+
+      FILE="$1"
+      [[ ! -f $FILE ]] && {
+          echo ERROR: File $FILE not found or is not a regular file
+          shift
+          continue
+      }
+      SVNSTAT=$( svn stat "$FILE" 2>&1 );
+      [[ "$SVNSTAT" != "${SVNSTAT/is not a working copy/}" ]] && {
+          echo ERROR: File $FILE is not under subversion control
+          shift
+          continue
+      }
+      echo $FILE:
+      svn log -l $HEADLINES "$FILE" | colorex -y '^r\d{6}' -c '\bC\d{6}\b' -b '^----*'
+      echo ....
+
+      echo
+      shift
+   done
+}
+
+svnd ()  {
+   if [[ $# -eq 0 ]];  then
+      svn diff | colordiff
+   else
+      while [[ $# -gt 0 ]];  do
+         FILE="$1"
+         [[ ! -f "$FILE" ]] && {
+             echo ERROR: File $FILE not found or is not a regular file
+             shift
+             continue
+         }
+         SVNSTAT=$( svn stat "$FILE" 2>&1 )
+         [[ "$SVNSTAT" != "${SVNSTAT/is not a working copy/}" ]] && {
+             echo ERROR: File $FILE is not under subversion control
+             shift
+             continue
+         }
+         [[ "$SVNSTAT" != "${SVNSTAT#M }" ]] && {
+             svn diff "$FILE" | colordiff
+         }
+         [[ "$SVNSTAT" = "" ]] && {
+             svn diff -r PREV:COMMITTED "$FILE" | colordiff
+         }
+         echo
+         shift
+      done
+   fi
+}
+
+# ssh fingerprints
+function fingerprints() {
+   local file="$1"
+   while read l;  do
+      [[ -n $l  &&  ${l###} = $l ]] &&  {
+         llen=${#l}
+         lstr=$(( $llen - 50 ))
+         ls="${l:0:20}...${l:$lstr:50}"
+         fp=$( ssh-keygen -l -f /dev/stdin  <<<$l)
+         echo  ${fp/\/dev\/stdin/} - $ls
+      }
+   done < $file;
+}
+

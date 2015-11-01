@@ -1,0 +1,915 @@
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"          _
+"      __ | \
+"     /   | /
+"     \__ | \
+" by Amix - http://amix.dk/
+"
+" Maintainer:	Amir Salihefendic <amix3k at gmail.com>
+" Version: 2.8
+" Last Change: 26/10/06 17:44:17
+"
+" Sections:
+" ----------------------
+"   *> General
+"   *> Colors and Fonts
+"   *> Fileformats
+"   *> VIM userinterface
+"   ------ *> Statusline
+"   *> Visual
+"   *> Moving around and tabs
+"   *> General Autocommands
+"   *> Parenthesis/bracket expanding
+"   *> General Abbrevs
+"   *> Editing mappings etc.
+"   *> Command-line config
+"   *> Buffer realted
+"   *> Files and backups
+"   *> Folding
+"   *> Text options
+"   ------ *> Indent
+"   *> Spell checking
+"   *> Plugin configuration
+"   ------ *> Yank ring
+"   ------ *> File explorer
+"   ------ *> Minibuffer
+"   ------ *> Tag list (ctags) - not used
+"   ------ *> LaTeX Suite things
+"   *> Filetype generic
+"   ------ *> Todo
+"   ------ *> VIM
+"   ------ *> HTML related
+"   ------ *> Ruby & PHP section
+"   ------ *> Python section
+"   ------ *> Cheetah section
+"   ------ *> Vim section
+"   ------ *> Java section
+"   ------ *> JavaScript section
+"   ------ *> C mappings
+"   ------ *> SML
+"   ------ *> Scheme bindings
+"   *> Snippets
+"   ------ *> Python
+"   ------ *> javaScript
+"   *> Cope
+"   *> MISC
+"
+"  Tip:
+"   If you find anything that you can't understand than do this:
+"   help keyword OR helpgrep keywords
+"  Example:
+"   Go into command-line mode and type helpgrep nocompatible, ie.
+"   :helpgrep nocompatible
+"   then press <leader>c to see the results, or :botright cw
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Added by MCMD
+
+" Tell vim to remember certain things when we exit
+" '10 : marks will be remembered for up to 10 previously edited files
+" "100 : will save up to 100 lines for each register
+" :20 : up to 20 lines of command-line history will be remembered
+" % : saves and restores the buffer list
+" n... : where to save the viminfo files
+set viminfo=!,'10,\"100,:20,%,n~/.viminfo
+autocmd BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
+
+" BASH support
+let g:BASH_AuthorName   = 'Marcel'
+let g:BASH_AuthorRef    = 'MCMD'
+let g:BASH_Email        = 'mcmd1962@
+let g:BASH_Company      = 'XXX, Amsterdam NL'
+
+let g:Perl_AuthorName   = 'Marcel'
+let g:Perl_AuthorRef    = 'MCMD'
+let g:Perl_Email        = 'mcmd1962@'
+let g:Perl_Company      = 'XXX, Amsterdam NL'
+
+" Working with python is a bitch if you cannot see tabs and spaces
+" set list listchars=tab:>-,trail:.,extends:>
+set list listchars=tab:>-,trail:␣,extends:>
+
+
+" Force saving files that require root permission
+cmap w!! w !sudo tee > /dev/null %
+
+
+" From Berteun:
+
+" When opening a Python file, put the tab and spaces settings to the Official
+" settings as recommended by the PEPs.
+
+" autocmd BufRead *.py set ai ts=8 sw=4 sta et sts=4
+
+" Highlight every 5th / 9th etc. column with a dark blue background, this makes
+" it easier to spot indentation.
+autocmd BufRead *.py highlight fourSpaces ctermbg=DarkGray
+" autocmd BufRead *.py 2match fourSpaces '\(^ *\)\@<=\(\%5v\|\%9v\|\%13v\|\%17v\|\%21v\|\%25v\|\%29v\|\%33v\|\%37v\|\%41v\|\%45v\)\(   \)\@='
+autocmd BufRead *.py 2match fourSpaces '\(^ *\)\@<=\(\%5v\|\%9v\)\(   \)\@='
+
+" When typing :make, run the source to pylint for static code checking:
+autocmd FileType python let &makeprg="pylint -i y --reports=n --output-format=parseable %:p"
+autocmd FileType python let &errorformat="%f:%l: %m"
+
+" From Merouane Achour
+map <buffer> <S-e> :w<CR>:!/usr/bin/env python % <CR>
+
+
+" Hacking VIM, page 108
+function! DiffWithFileFromDisk()
+   let filename=expand('%')
+   let diffname = filename.'fileFromBuffer'
+   exec 'saveas! '.diffname
+   diffthis
+   vsplit
+   exec 'edit '.filename
+   diffthis
+endfunction
+
+:nmap <F7> :call DiffWithFileFromDisk()<cr>
+
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => General
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Get out of VI's compatible mode..
+set nocompatible
+
+"Sets how many lines of history VIM har to remember
+set history=200
+
+"Enable filetype plugin
+filetype plugin on
+filetype indent on
+
+"Set to auto read when a file is changed from the outside
+set autoread
+
+"Have the mouse enabled all the time:
+if v:version >= 703
+   set mouse=v
+endif
+
+"Set mapleader
+let mapleader = ","
+let g:mapleader = ","
+
+"Fast saving
+nmap <leader>w :w!<cr>
+nmap <leader>f :find<cr>
+
+"Fast reloading of the .vimrc
+map <leader>s :source ~/.vim/vimrc<cr>
+"Fast editing of .vimrc
+map <leader>e :e! ~/.vim/vimrc<cr>
+"When .vimrc is edited, reload it
+autocmd! bufwritepost vimrc source ~/.vim/vimrc
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Colors and Fonts
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Enable syntax hl
+syntax enable
+autocmd Syntax * syn match ExtraWhiteSpace /\s\+$\| \+\ze\t/
+autocmd Syntax * syn match Tabs            /\t\+/
+
+"Set font to Monaco 10pt
+if MySys() == "mac"
+  set gfn=Bitstream\ Vera\ Sans\ Mono:h12
+  set shell=/bin/bash
+elseif MySys() == "windows"
+  set gfn=Bitstream\ Vera\ Sans\ Mono:h10
+elseif MySys() == "linux"
+  set gfn=Monospace\ 10
+  set shell=/bin/bash
+endif
+if has("gui_running")
+  set guioptions-=T
+  "set guioptions-=e
+  set background=dark
+  let psc_style='cool'
+  colorscheme ps_color
+else
+  colorscheme ps_color
+endif
+set t_Co=256
+colorscheme zenburn
+
+set encoding=utf8
+
+"Some nice mapping to switch syntax (useful if one mixes different languages in one file)
+map <leader>1 :set syntax=sh<cr>
+map <leader>2 :set syntax=perl<cr>
+map <leader>3 :set syntax=python<cr>
+map <leader>4 :set syntax=xml<cr>
+map <leader>5 :set ft=sh<cr>
+map <leader>6 :set ft=perl<cr>
+"map <leader>$ :syntax sync fromstart<cr>
+
+autocmd BufEnter * :syntax sync fromstart
+
+"Highlight current
+if has("gui_running")
+  set CursorLine
+endif
+
+if v:version >= 700
+   set cursorline
+   autocmd InsertLeave * highlight CursorLine term=none cterm=none ctermbg=none  ctermfg=none cterm=underline
+   autocmd InsertEnter * highlight CursorLine term=none cterm=none ctermbg=black ctermfg=gray
+endif
+
+"Omni menu colors
+highlight Pmenu               ctermbg=DarkBlue  ctermfg=White
+highlight PmenuSel cterm=bold ctermbg=Yellow    ctermfg=DarkBlue
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Fileformats
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Favorite filetypes
+set ffs=unix,dos,mac
+
+nmap <leader>fd :se ff=dos<cr>
+nmap <leader>fu :se ff=unix<cr>
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => VIM userinterface
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Set 7 lines to the curors - when moving vertical..
+set so=7
+
+"Turn on WiLd menu
+set wildmenu
+
+"Always show current position
+set ruler
+
+"The commandbar is 2 high
+set cmdheight=3
+
+"Show line number
+" set nu
+set nonumber
+
+"Do not redraw, when running macros.. lazyredraw
+set lz
+
+"Change buffer - without saving
+set hid
+
+"Set backspace
+set backspace=eol,start,indent
+
+"Bbackspace and cursor keys wrap to
+set whichwrap+=<,>,h,l
+
+"Ignore case when searching
+"set ignorecase
+set incsearch
+
+"Set magic on
+set magic
+
+"No sound on errors.
+set noerrorbells
+set novisualbell
+set t_vb=
+
+"show matching bracets
+set showmatch
+
+"How many tenths of a second to blink
+set mat=2
+
+"Highlight search things
+set hlsearch
+highlight search term=NONE ctermfg=White  ctermbg=DarkBlue
+
+  """"""""""""""""""""""""""""""
+  " => Statusline
+  """"""""""""""""""""""""""""""
+  "Always hide the statusline
+  set laststatus=2
+
+  function! CurDir()
+     let curdir = substitute(getcwd(), '/Users/amir/', "~/", "g")
+     return curdir
+  endfunction
+
+  "Format the statusline
+  "set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ %l/%L:%c
+  set statusline=%F%m%r%h%w\ \ [FORMAT\ %{&ff}]\ \ [TYPE\ %Y]\ \ [ASCII\ \%03.3b]\ \ [HEX\ \%02.2B]\ \ [POS\ %02l/%L:%v\ \ %p%%]
+
+
+""""""""""""""""""""""""""""""
+" => Visual
+""""""""""""""""""""""""""""""
+function! CmdLine(str)
+    exe "menu Foo.Bar :" . a:str
+    emenu Foo.Bar
+    unmenu Foo
+endfunction
+
+" From an idea by Michael Naumann
+function! VisualSearch(direction) range
+    let l:saved_reg = @"
+    execute "normal! vgvy"
+
+    let l:pattern = escape(@", '\\/.*$^~[]')
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+
+    if a:direction == 'b'
+        execute "normal ?" . l:pattern . "^M"
+    elseif a:direction == 'gv'
+        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*.')
+    elseif a:direction == 'f'
+        execute "normal /" . l:pattern . "^M"
+    endif
+
+    let @/ = l:pattern
+    let @" = l:saved_reg
+endfunction
+
+"Basically you press * or # to search for the current selection !! Really useful
+vnoremap <silent> * :call VisualSearch('f')<CR>
+vnoremap <silent> # :call VisualSearch('b')<CR>
+vnoremap <silent> gv :call VisualSearch('gv')<CR>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Moving around and tabs
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Map space to / and c-space to ?
+"map <space> /
+"map <c-space> ?
+
+"Smart way to move btw. windows
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+
+"Actually, the tab does not switch buffers, but my arrows
+"Bclose function ca be found in "Buffer related" section
+"map <leader>bd :Bclose<cr>
+"map <down> <leader>bd
+"Use the arrows to something usefull
+map <right> :bn<cr>
+map <left> :bp<cr>
+
+"Tab configuration
+map <leader>tn :tabnew %<cr>
+map <leader>te :tabedit
+map <leader>tc :tabclose<cr>
+map <leader>tm :tabmove
+try
+  set switchbuf=usetab
+  set stal=2
+catch
+endtry
+
+"Moving fast to front, back and 2 sides ;)
+imap <m-$> <esc>$a
+imap <m-0> <esc>0i
+imap <D-$> <esc>$a
+imap <D-0> <esc>0i
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => General Autocommands
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Switch to current dir
+map <leader>cd :cd %:p:h<cr>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Parenthesis/bracket expanding
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"vnoremap $1 <esc>`>a)<esc>`<i(<esc>
+")
+"vnoremap $2 <esc>`>a]<esc>`<i[<esc>
+"vnoremap $3 <esc>`>a}<esc>`<i{<esc>
+"vnoremap $$ <esc>`>a"<esc>`<i"<esc>
+"vnoremap $q <esc>`>a'<esc>`<i'<esc>
+"vnoremap $e <esc>`>a"<esc>`<i"<esc>
+
+"Map auto complete of (, ", ', [
+"inoremap $1 ()<esc>:let leavechar=")"<cr>i
+"inoremap $2 []<esc>:let leavechar="]"<cr>i
+"inoremap $4 {<esc>o}<esc>:let leavechar="}"<cr>O
+"inoremap $3 {}<esc>:let leavechar="}"<cr>i
+"inoremap $q ''<esc>:let leavechar="'"<cr>i
+"inoremap $e ""<esc>:let leavechar='"'<cr>i
+au BufNewFile,BufRead *.\(vim\)\@! inoremap " ""<esc>:let leavechar='"'<cr>i
+au BufNewFile,BufRead *.\(txt\)\@! inoremap ' ''<esc>:let leavechar="'"<cr>i
+
+imap <m-l> <esc>:exec "normal f" . leavechar<cr>a
+imap <d-l> <esc>:exec "normal f" . leavechar<cr>a
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => General Abbrevs
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"My information
+iab xdate <c-r>=strftime("%d/%m/%y %H:%M:%S")<cr>
+iab xname Amir Salihefendic
+iab cancle cancel
+iab Cancle Cancel
+iab xcabo  //XXX: Cabo
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Editing mappings etc.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Remap VIM 0
+map 0 ^
+
+"Move a line of text using control
+nmap <M-j> mz:m+<cr>`z
+nmap <M-k> mz:m-2<cr>`z
+vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
+vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
+
+if MySys() == "mac"
+  nmap <D-j> <M-j>
+  nmap <D-k> <M-k>
+  vmap <D-j> <M-j>
+  vmap <D-k> <M-k>
+endif
+
+func! DeleteTrailingWS()
+  exe "normal mz"
+  %s/\s\+$//ge
+  exe "normal `z"
+endfunc
+autocmd BufWrite *.py :call DeleteTrailingWS()
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Command-line config
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+func! Cwd()
+  let cwd = getcwd()
+  return "e " . cwd
+endfunc
+
+func! DeleteTillSlash()
+  let g:cmd = getcmdline()
+  if MySys() == "linux" || MySys() == "mac"
+    let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*", "\\1", "")
+  else
+    let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\]\\).*", "\\1", "")
+  endif
+  if g:cmd == g:cmd_edited
+    if MySys() == "linux" || MySys() == "mac"
+      let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*/", "\\1", "")
+    else
+      let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\\]\\).*\[\\\\\]", "\\1", "")
+    endif
+  endif
+  return g:cmd_edited
+endfunc
+
+func! CurrentFileDir(cmd)
+  return a:cmd . " " . expand("%:p:h") . "/"
+endfunc
+
+"Smart mappings on the command line
+"cno $h e ~/
+"cno $d e ~/Desktop/
+"cno $j e ./
+
+"cno $q <C-\>eDeleteTillSlash()<cr>
+
+"cno $c e <C-\>eCurrentFileDir("e")<cr>
+
+"cno $tc <C-\>eCurrentFileDir("tabnew")<cr>
+"cno $th tabnew ~/
+"cno $td tabnew ~/Desktop/
+
+"Bash like
+cnoremap <C-A>		<Home>
+cnoremap <C-E>		<End>
+cnoremap <C-K>		<C-U>
+
+cnoremap <C-P> <Up>
+cnoremap <C-N> <Down>
+
+" Disable the use of arrow keys in insert mode
+inoremap  <Up>     <NOP>
+inoremap  <Down>   <NOP>
+inoremap  <Left>   <NOP>
+inoremap  <Right>  <NOP>
+noremap   <Up>     <NOP>
+noremap   <Down>   <NOP>
+noremap   <Left>   <NOP>
+noremap   <Right>  <NOP>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Buffer realted
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Fast open a buffer by search for a name
+map <c-q> :sb
+
+"Open a dummy buffer for paste
+map <leader>q :e ~/buffer<cr>
+
+" Buffer - reverse everything ... :)
+map <F9> ggVGg?
+
+" Don't close window, when deleting a buffer
+command! Bclose call <SID>BufcloseCloseIt()
+
+function! <SID>BufcloseCloseIt()
+   let l:currentBufNum = bufnr("%")
+   let l:alternateBufNum = bufnr("#")
+
+   if buflisted(l:alternateBufNum)
+     buffer #
+   else
+     bnext
+   endif
+
+   if bufnr("%") == l:currentBufNum
+     new
+   endif
+
+   if buflisted(l:currentBufNum)
+     execute("bdelete! ".l:currentBufNum)
+   endif
+endfunction
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Files and backups
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Turn backup off
+set nobackup
+set nowb
+set noswapfile
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Folding
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Enable folding, I find it very useful
+if v:version >= 700
+   " set foldenable
+   set foldlevel=9
+endif
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Text options
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set expandtab
+set shiftwidth=3
+set softtabstop=3
+"highlight ExtraWhiteSpace ctermbg=red guibg=red
+" The following alternative may be less obtrusive.
+highlight ExtraWhiteSpace ctermbg=darkgreen guibg=lightgreen
+highlight Tabs            ctermbg=darkblue  guibg=lightblue
+" Try the following if your GUI uses a dark background.
+"highlight ExtraWhiteSpace ctermbg=darkgreen guibg=darkgreen
+
+
+function! EnableSpaceHighlight()
+   set list listchars=tab:>␣,trail:␣,extends:>
+   execute "highlight ExtraWhiteSpace ctermbg=darkgreen guibg=lightgreen"
+   execute "highlight Tabs            ctermbg=darkblue  guibg=lightblue"
+endfun
+nmap <F11> :call EnableSpaceHighlight()<cr>
+
+function! DisableSpaceHighlight()
+   set list listchars=tab:⋅⋅,trail:␣,extends:>
+   execute "highlight ExtraWhiteSpace NONE"
+   execute "highlight Tabs            NONE"
+endfun
+nmap <F12> :call DisableSpaceHighlight()<cr>
+
+if v:version >= 700
+   "autocmd InsertLeave * redraw!
+   autocmd InsertEnter * match ExtraWhiteSpace /\s\+\%#\@<!$/
+   autocmd InsertLeave * match ExtraWhiteSpace /\s\+$/
+endif
+
+map <leader>t2 :set shiftwidth=2<cr>
+map <leader>t4 :set shiftwidth=4<cr>
+
+set smarttab
+set lbr
+set tw=500
+
+   """"""""""""""""""""""""""""""
+   " => Indent
+   """"""""""""""""""""""""""""""
+   "Auto indent
+   set ai
+
+   "Smart indet
+   set si
+   inoremap # X<C-H>#
+
+   "C-style indeting
+   "set cindent
+
+   "Wrap lines
+   set wrap
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Spell checking
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+map <leader>sn ]s
+map <leader>sp [s
+map <leader>sa zg
+map <leader>s? z=
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Plugin configuration
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+   """"""""""""""""""""""""""""""
+   " => Vim Grep
+   """"""""""""""""""""""""""""""
+   let Grep_Skip_Dirs = 'RCS CVS SCCS .svn generated'
+   set grepprg=/bin/grep\ -nH
+
+   """"""""""""""""""""""""""""""
+   " => Yank Ring
+   """"""""""""""""""""""""""""""
+   map <leader>y :YRShow<cr>
+   let g:yankring_persist = 0
+
+   """"""""""""""""""""""""""""""
+   " => File explorer
+   """"""""""""""""""""""""""""""
+   "Split vertically
+   let g:explVertical=1
+
+   "Window size
+   let g:explWinSize=35
+
+   let g:explSplitLeft=1
+   let g:explSplitBelow=1
+
+   "Hide some files
+   let g:explHideFiles='^\.,.*\.class$,.*\.swp$,.*\.pyc$,.*\.swo$,\.DS_Store$'
+
+   "Hide the help thing..
+   let g:explDetailedHelp=0
+
+
+   """"""""""""""""""""""""""""""
+   " => Minibuffer
+   """"""""""""""""""""""""""""""
+   let g:miniBufExplModSelTarget = 1
+   let g:miniBufExplorerMoreThanOne = 2
+   let g:miniBufExplModSelTarget = 0
+   let g:miniBufExplUseSingleClick = 1
+   let g:miniBufExplMapWindowNavVim = 1
+   let g:miniBufExplVSplit = 25
+   let g:miniBufExplSplitBelow=1
+
+   let g:bufExplorerSortBy = "name"
+
+   autocmd BufRead,BufNew :call UMiniBufExplorer
+
+   map <leader>u :TMiniBufExplorer<cr>:TMiniBufExplorer<cr>
+
+
+   """"""""""""""""""""""""""""""
+   " => Tag list (ctags) - not used
+   """"""""""""""""""""""""""""""
+   let Tlist_Ctags_Cmd = "/usr/bin/ctags"
+   let Tlist_WinWidth = 50
+
+   map <F4> :TlistToggle<cr>
+   map <F8> :!/usr/bin/ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+
+
+   """"""""""""""""""""""""""""""
+   " => LaTeX Suite things
+   """"""""""""""""""""""""""""""
+   let g:Tex_DefaultTargetFormat="pdf"
+   let g:Tex_ViewRule_pdf='xpdf'
+
+   "Bindings
+   autocmd FileType tex map <silent><leader><space> :w!<cr> :silent! call Tex_RunLaTeX()<cr>
+
+   "Auto complete some things ;)
+   autocmd FileType tex inoremap $i \indent
+   autocmd FileType tex inoremap $* \cdot
+   autocmd FileType tex inoremap $i \item
+   autocmd FileType tex inoremap $m \[<cr>\]<esc>O
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Filetype generic
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+   """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+   " => Set Omni complete functions
+   """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+   autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+
+   """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+   " => Todo
+   """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+   au BufNewFile,BufRead *.todo so ~/.vim/syntax/amido.vim
+   au BufNewFile,BufRead *.mako set ft=mako
+
+   """"""""""""""""""""""""""""""
+   " => VIM
+   """"""""""""""""""""""""""""""
+   autocmd FileType vim map <buffer> <leader><space> :w!<cr>:source %<cr>
+
+
+   """"""""""""""""""""""""""""""
+   " => HTML related
+   """"""""""""""""""""""""""""""
+   " HTML entities - used by xml edit plugin
+   let xml_use_xhtml = 1
+   "let xml_no_auto_nesting = 1
+
+   "To HTML
+   let html_use_css = 1
+   let html_number_lines = 0
+   let use_xhtml = 1
+
+
+   """"""""""""""""""""""""""""""
+   " => Ruby & PHP section
+   """"""""""""""""""""""""""""""
+   autocmd FileType ruby map <buffer> <leader><space> :w!<cr>:!ruby %<cr>
+   autocmd FileType php compiler php
+   autocmd FileType php map <buffer> <leader><space> <leader>cd:w<cr>:make %<cr>
+
+
+   """"""""""""""""""""""""""""""
+   " => Python section
+   """"""""""""""""""""""""""""""
+   "Run the current buffer in python - ie. on leader+space
+   "au FileType python so ~/.vim/syntax/python.vim
+
+   "Python iMaps
+   au FileType python set nocindent
+   au FileType python inoremap <buffer> $r return
+   au FileType python inoremap <buffer> $i import
+   au FileType python inoremap <buffer> $p print
+   au FileType python inoremap <buffer> $f #--- PH ----------------------------------------------<esc>FP2xi
+
+   au BufNewFile,BufRead *.jinja set syntax=htmljinja
+   syn keyword pythonConstant True None False self
+
+
+   """"""""""""""""""""""""""""""
+   " => Cheetah section
+   """""""""""""""""""""""""""""""
+   autocmd FileType cheetah set ft=xml
+   autocmd FileType cheetah set syntax=cheetah
+
+   """""""""""""""""""""""""""""""
+   " => Vim section
+   """""""""""""""""""""""""""""""
+   autocmd FileType vim set nofen
+
+   """"""""""""""""""""""""""""""
+   " => Scheme bidings
+   """"""""""""""""""""""""""""""
+   autocmd BufNewFile,BufRead *.scm map <buffer> <leader><space> <leader>cd:w<cr>:!petite %<cr>
+   autocmd BufNewFile,BufRead *.scm inoremap <buffer> <C-t> (pretty-print )<esc>i
+   autocmd BufNewFile,BufRead *.scm vnoremap <C-t> <esc>`>a)<esc>`<i(pretty-print <esc>
+
+
+""""""""""""""""""""""""""""""
+" => Snippets
+"""""""""""""""""""""""""""""""
+   "You can use <c-j> to goto the next <++> - it is pretty smart ;)
+
+   """""""""""""""""""""""""""""""
+   " => Python
+   """""""""""""""""""""""""""""""
+   autocmd FileType python inorea <buffer> cfun <c-r>=IMAP_PutTextWithMovement("def <++>(<++>):\n<++>\nreturn <++>")<cr>
+   autocmd FileType python inorea <buffer> cclass <c-r>=IMAP_PutTextWithMovement("class <++>:\n<++>")<cr>
+   autocmd FileType python inorea <buffer> cfor <c-r>=IMAP_PutTextWithMovement("for <++> in <++>:\n<++>")<cr>
+   autocmd FileType python inorea <buffer> cif <c-r>=IMAP_PutTextWithMovement("if <++>:\n<++>")<cr>
+   autocmd FileType python inorea <buffer> cifelse <c-r>=IMAP_PutTextWithMovement("if <++>:\n<++>\nelse:\n<++>")<cr>
+
+   "Presse c-q insted of space (or other key) to complete the snippet
+   imap <C-q> <C-]>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Cope
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"For Cope
+map <silent> <leader><cr> :noh<cr>
+
+"Orginal for all
+map <leader>cc :botright cope<cr>
+map <leader>n :cn<cr>
+map <leader>p :cp<cr>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => MISC
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Remove the Windows ^M
+noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+
+"Paste toggle - when pasting something in, don't indent.
+set pastetoggle=<F3>
+
+"Remove indenting on empty lines
+map <F2> :%s/\s*$//g<cr>:noh<cr>
+
+"Super paste
+" inoremap <C-v> <esc>:set paste<cr>mui<C-R>+<esc>mv'uV'v=:set nopaste<cr>
+
+"A function that inserts links & anchors on a TOhtml export.
+" Notice:
+" Syntax used is:
+"   *> Link
+"   => Anchor
+if v:version >= 703
+   function! SmartTOHtml()
+      TOhtml
+      try
+       %s/&quot;\s\+\*&gt; \(.\+\)</" <a href="#\1" style="color: cyan">\1<\/a></g
+       %s/&quot;\(-\|\s\)\+\*&gt; \(.\+\)</" \&nbsp;\&nbsp; <a href="#\2" style="color: cyan;">\2<\/a></g
+       %s/&quot;\s\+=&gt; \(.\+\)</" <a name="\1" style="color: #fff">\1<\/a></g
+      catch
+      endtry
+      exe ":write!"
+      exe ":bd"
+   endfunction
+
+  function! DateToUTC()
+      %s/setDate/setUTCDate/g
+      %s/setMonth/setUTCMonth/g
+      %s/setFullYear/setUTCFullYear/g
+      %s/setHours/setUTCHours/g
+      %s/setMinute/setUTCMinute/g
+      %s/setSecond/setUTCSecond/g
+
+      %s/getDate/getUTCDate/g
+      %s/getMonth/getUTCMonth/g
+      %s/getFullYear/getUTCFullYear/g
+      %s/getHours/getUTCHours/g
+      %s/getMinute/getUTCMinute/g
+      %s/getSecond/getUTCSecond/g
+  endfunction
+endif
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Tabs
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"function! GuiTabLabel()
+"  let label = ''
+"  let bufnrlist = tabpagebuflist(v:lnum)
+"
+"  " Add '+' if one of the buffers in the tab page is modified
+"  for bufnr in bufnrlist
+"    if getbufvar(bufnr, "&modified")
+"      let label = '+'
+"      break
+"    endif
+"  endfor
+
+"  " Append the number of windows in the tab page if more than one
+"  let wincount = 0
+"  let label = ''
+"  let bufId = 0
+"  if v:version >= 700
+"     let wincount = tabpagewinnr(v:lnum, '$')
+"  endif
+"  if wincount > 1
+"    let label .= wincount
+"  endif
+"  if label != ''
+"    let label .= ' '
+"  endif
+"
+"  " Append the buffer name
+"  if v:version >= 700
+"     let bufId = bufnrlist[tabpagewinnr(v:lnum) - 1]
+"  endif
+"  let fn = bufname(bufId)
+"  let lastSlash = strridx(fn, '/')
+"  return label . strpart(fn, lastSlash+1, strlen(fn))
+"endfunction
+
+if v:version >= 700
+   set guitablabel=%{GuiTabLabel()}
+endif
+
+
+map  ½ $
+imap ½ $
+vmap ½ $
+cmap ½ $

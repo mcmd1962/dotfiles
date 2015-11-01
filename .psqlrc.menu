@@ -1,0 +1,43 @@
+#!/bin/bash
+
+B="\e[1;36m"
+BE="\e[1;33m"
+R="\e[0m"
+
+echo -e "\nCurrent Host Server Date Time:  $(date) "
+echo
+
+echo -e "${BE}Administrative queries:$R"
+echo -e "         ${B}:settings${R}           -- Server settings"
+echo -e "         ${B}:pgreload${R}           -- Reload server configuration"
+echo -e "         ${B}:conninfo${R}           -- Server connections"
+echo -e "         ${B}:currentactivity${R}    -- Current activity"
+echo -e "         ${B}:activity${R}           -- Server activity"
+echo -e "         ${B}:locks${R}              -- Lock info"
+echo -e "         ${B}:waits${R}              -- Waiting queries"
+echo -e "         ${B}:dbsize${R}             -- Database size"
+echo -e "         ${B}:replicationstatus${R}  -- WAL replication status"
+echo -e "         ${B}:uptime${R}             -- Server uptime"
+echo -e "         ${B}:menu${R}               -- Help Menu"
+echo -e "         ${B}\\h${R}                  -- Help with SQL commands"
+echo -e "         ${B}\\?${R}                  -- Help with psql commands"
+echo
+
+echo -e "${BE}Database queries:$R"
+echo -e "         ${B}:bloat${R}              -- bloat info"
+echo
+
+echo -e "${BE}Table queries:$R"
+#echo -e "         ${B}:tsize${R}              -- Tables size (alternate)"
+echo -e "         ${B}:rtsize${R}             -- Relational tables size"
+echo -e "         ${B}:tablesize${R}          -- Tables size"
+echo -e "         ${B}:uselesscol${R}         -- Useless columns"
+echo
+
+echo -e "${BE}Development queries:$R"
+echo -e "         ${B}:sp${R}                 -- Current Search Path"
+echo -e "         ${B}:clear${R}              -- Clear screen"
+echo -e "         ${B}:ll${R}                 -- List"
+echo
+
+

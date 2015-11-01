@@ -1,0 +1,10 @@
+*adm  /var/adm
+*ap   /usr/local/apache
+*apc  /usr/local/apache/conf
+*apb  /usr/local/apache/bin
+*c    /var/spool/cron/crontabs
+*f    /home/marcel/bin/uploadprofile/files
+*log  /var/log
+*rb   /opt/rcsbackup/rcsroot
+*rbm  /opt/rcsbackup/rcsroot.archive
+*tmp  /var/tmp

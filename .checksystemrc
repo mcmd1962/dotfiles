@@ -1,0 +1,18 @@
+# This file is filled with all possible configuration items for CheckSystem.pl 
+# with the default value, but in commented form
+
+#os-perf:suppressed:1		# do not suppress performance checks (inode, dns name cache and so on)
+#os-perf:namelookup:90:80
+#os-perf:inodecache:40:70
+
+#fs-size:suppressed:1		# do not suppress file system checks
+#fs-size:/:60:85
+#fs-size:/tmp:30:50
+#fs-size:/var:82:94
+#fs-size:default:70:90		# default values to use for 'unknown' file systems
+
+#files:suppressed:1		# do not suppress check existence of unwanted files and directories
+
+#raidchk:suppressed:0		# do NOT CHECK hardware raid checks, this is only for a few systems like the V.440's
+
+#metastat:suppressed:1		# do not suppress metastat checks

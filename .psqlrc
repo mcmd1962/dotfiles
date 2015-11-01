@@ -1,0 +1,56 @@
+-----------------------------------------
+-- psqlrc file to set psql preferences --
+-- Author : Prashanth Goriparthi       --
+-----------------------------------------
+
+\set QUIET ON
+
+--customize prompt
+-- \set PROMPT1 '%[%033[1;32;40m%]%`echo $HOST` port=%>  %n@%/%[%033[0m%] %#  '
+-- \set PROMPT2 '[more] %R >  '
+-- http://i-dba.blogspot.se/2014/02/colorizing-psql-prompt-guide.html
+-- %m -> short hostname; %M -> full hostname
+\set PROMPT1 '\n%[%033[1;31m%]➤ %[%033[2;37m%]%`date "+%a %H:%M"`%[%033[0m%] %[%033[1;36m%]%n%[%033[34m%]@%[%033[1;36m%]%`echo $HOST`:%>%[%033[1;33m%]/%/ %[%033[1;31m%]%x %[%033[K%]%[%033[0m%]\n%[%033[1;33m%]%R%#%[%033[0m%] '
+\set PROMPT2 ' %[%033[1;33m%]%R%#%[%033[0m%] '
+-- consider: http://petereisentraut.blogspot.com/2009/09/how-to-set-xterm-titles-in-psql.html
+
+\set PAGER OFF
+\set HISTFILE ~/.psql_history- :DBNAME
+\set HISTSIZE 2000
+\set ECHO_HIDDEN ON
+\set COMP_KEYWORD_CASE upper
+
+\timing
+\encoding unicode
+
+\pset null ∅
+
+-- nicer tables
+\pset linestyle unicode
+
+\pset border 2
+
+-- automatically switch to \x for large outputs
+\x auto
+
+-- better errors
+\set VERBOSITY verbose
+
+-- keep inputs in the history once
+\set HISTCONTROL ignoredups
+
+-- allow pasting of values to avoid stupid indenting
+\set paste
+
+\set QUIET OFF
+
+\echo '\nCurrent Host Server Date Time : '`date` '\n'
+
+
+
+-- Administration queries
+
+-- How to add multiline aliases:
+-- \set some_alias `cat ~/.psqlrc-aliases/some_client/some_alias.sql`
+
+\ir .psqlrc.admin

@@ -1,0 +1,178 @@
+§%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== comment.end-of-line-comment == append ==
+# <CURSOR>
+§%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== comment.frame ==
+#---------------------------------------------------------------------------
+#  <CURSOR>
+#---------------------------------------------------------------------------
+§%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== comment.function ==
+
+#===  FUNCTION  ================================================================
+#         NAME:  |?FUNCTION_NAME|
+#      PURPOSE:  <CURSOR>
+#   PARAMETERS:  ????
+#      RETURNS:  ????
+#  DESCRIPTION:  ????
+#       THROWS:  no exceptions
+#     COMMENTS:  none
+#     SEE ALSO:  n/a
+#===============================================================================
+def |FUNCTION_NAME|():
+§%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== comment.method ==
+#===  CLASS METHOD  ============================================================
+#        CLASS:  |?CLASSNAME|
+#       METHOD:  |?METHODNAME|
+#   PARAMETERS:  ????
+#      RETURNS:  ????
+#  DESCRIPTION:  <CURSOR>
+#       THROWS:  no exceptions
+#     COMMENTS:  none
+#     SEE ALSO:  n/a
+#===============================================================================
+§%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== comment.file-description-pl == start ==
+#!/usr/bin/env python
+# vim: set autoindent filetype=python tabstop=4 shiftwidth=4 softtabstop=4 number textwidth=175 expandtab:
+
+#===============================================================================
+#
+#         FILE:  |FILENAME|
+#
+#        USAGE:  ./|FILENAME|
+#
+#  DESCRIPTION:  <CURSOR>
+#
+#       AUTHOR:  |AUTHOR| (|AUTHORREF|), |EMAIL|
+#      COMPANY:  |COMPANY|
+#      VERSION:  1.0
+#      CREATED:  |DATE| |TIME|
+# DEPENDENCIES:
+#
+#      HISTORY:
+#                + |DATE|/|AUTHORREF|: Creation of script
+#===============================================================================
+
+import types
+import time
+import string
+import sys
+import smtplib
+import datetime
+import logging
+import ConfigParser
+import re
+import os
+
+# ##############################################################################
+
+#===  FUNCTION  ================================================================
+#         NAME:  main
+#      PURPOSE:..find files recursively in a given directory
+#   PARAMETERS:  none
+#      RETURNS:  file list
+#  DESCRIPTION:  This function provides basic GNU find functionality (find dir -name file)
+#       THROWS:  exception when path does not exist or is not a directory
+#     COMMENTS:  none
+#     SEE ALSO:  n/a
+#===============================================================================
+def main():
+
+    # Some initialization
+    pass
+
+
+#---------------------------------------------------------------------------
+#  Main part here
+#---------------------------------------------------------------------------
+if __name__ == "__main__":
+    main()
+
+else:
+    # Test several functions
+    pass
+
+
+
+§%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== comment.file-description-pm == start ==
+# vim: set ai filetype=perl  ts=3 sw=3 sts=3 nu tw=175 et sta:
+#
+#===============================================================================
+#
+#         FILE:  |FILENAME|
+#
+#  DESCRIPTION:  <CURSOR>
+#
+#        FILES:  ---
+#         BUGS:  ---
+#        NOTES:  ---
+#       AUTHOR:  |AUTHOR| (|AUTHORREF|), |EMAIL|
+#      COMPANY:  |COMPANY|
+#      VERSION:  1.0
+#      CREATED:  |DATE| |TIME|
+#     REVISION:  ---
+#===============================================================================
+
+use strict;
+use warnings;
+
+
+
+§%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== comment.file-description-t == start ==
+#
+#===============================================================================
+#
+#         FILE:  |FILENAME|
+#
+#  DESCRIPTION:  <CURSOR>
+#
+#        FILES:  ---
+#         BUGS:  ---
+#        NOTES:  ---
+#       AUTHOR:  |AUTHOR| (|AUTHORREF|), |EMAIL|
+#      COMPANY:  |COMPANY|
+#      VERSION:  1.0
+#      CREATED:  |DATE| |TIME|
+#     REVISION:  ---
+#===============================================================================
+
+use strict;
+use warnings;
+
+use Test::More tests => 1;                      # last test to print
+
+
+§%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== comment.file-description-pod == start ==
+#
+#===============================================================================
+#
+#         FILE:  |FILENAME|
+#
+#  DESCRIPTION:  |CURSOR|
+#
+#       AUTHOR:  |AUTHOR| (|AUTHORREF|), <|EMAIL|>
+#      COMPANY:  |COMPANY|
+#      CREATED:  |DATE|
+#     REVISION:  ---
+#===============================================================================
+
+
+§%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+== comment.keyword-bug == append ==
+ # :BUG:|DATE| |TIME|:|AUTHORREF|: <CURSOR>
+== comment.keyword-todo == append ==
+ # :TODO:|DATE| |TIME|:|AUTHORREF|: <CURSOR>
+== comment.keyword-tricky == append ==
+ # :TRICKY:|DATE| |TIME|:|AUTHORREF|: <CURSOR>
+== comment.keyword-warning == append ==
+ # :WARNING:|DATE| |TIME|:|AUTHORREF|: <CURSOR>
+== comment.keyword-workaround == append ==
+ # :WORKAROUND:|DATE| |TIME|:|AUTHORREF|: <CURSOR>
+== comment.keyword-keyword == append ==
+ # :|?KEYWORD:u|:|DATE| |TIME|:|AUTHORREF|: <CURSOR>
+§%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

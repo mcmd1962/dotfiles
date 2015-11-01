@@ -1,0 +1,36 @@
+-- Administration queries
+
+-- source: http://opensourcedbms.com/dbms/psqlrc-psql-startup-file-for-postgres/
+
+
+
+\set menu '\\! . ~/.psqlrc.menu;'
+
+--  aliases:
+\set  activity            `cat ~/.psqlrc.aliases/admin/activity.sql`
+\set  conninfo            `cat ~/.psqlrc.aliases/admin/conninfo.sql`
+\set  currentactivity     `cat ~/.psqlrc.aliases/admin/currentactivity.sql`
+\set  dbsize              `cat ~/.psqlrc.aliases/admin/dbsize.sql`
+\set  locks               `cat ~/.psqlrc.aliases/admin/locks.sql`
+\set  pgreload            `cat ~/.psqlrc.aliases/admin/pgreload.sql`
+\set  replicationstatus   `cat ~/.psqlrc.aliases/admin/replicationstatus.sql`
+\set  settings            `cat ~/.psqlrc.aliases/admin/settings.sql`
+\set  uptime              `cat ~/.psqlrc.aliases/admin/uptime.sql`
+\set  waits               `cat ~/.psqlrc.aliases/admin/waits.sql`
+\set  xidsinuse           `cat ~/.psqlrc.aliases/admin/xidsinuse.sql`
+
+-- database
+\set  bloat               `cat ~/.psqlrc.aliases/database/bloat.sql`
+
+-- table
+\set  rtsize              `cat ~/.psqlrc.aliases/table/rtsize.sql`
+\set  tablesize           `cat ~/.psqlrc.aliases/table/tablesize.sql`
+-- \set  tsize            `cat ~/.psqlrc.aliases/table/tsize.sql`
+\set  uselesscol          `cat ~/.psqlrc.aliases/table/uselesscol.sql`
+
+
+-- Development queries:
+
+\set sp 'SHOW search_path;'
+\set clear '\\! clear;'
+\set ll '\\! ls -lrt;'
