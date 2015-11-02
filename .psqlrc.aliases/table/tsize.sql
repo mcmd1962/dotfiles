@@ -11,4 +11,4 @@ ORDER BY
    x.size DESC,
    x.total_size DESC,
    table_schema,
-   table_name
+   table_name;

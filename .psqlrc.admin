@@ -11,7 +11,6 @@
 \set  conninfo            `cat ~/.psqlrc.aliases/admin/conninfo.sql`
 \set  currentactivity     `cat ~/.psqlrc.aliases/admin/currentactivity.sql`
 \set  dbsize              `cat ~/.psqlrc.aliases/admin/dbsize.sql`
-\set  locks               `cat ~/.psqlrc.aliases/admin/locks.sql`
 \set  pgreload            `cat ~/.psqlrc.aliases/admin/pgreload.sql`
 \set  replicationstatus   `cat ~/.psqlrc.aliases/admin/replicationstatus.sql`
 \set  settings            `cat ~/.psqlrc.aliases/admin/settings.sql`
@@ -19,13 +18,30 @@
 \set  waits               `cat ~/.psqlrc.aliases/admin/waits.sql`
 \set  xidsinuse           `cat ~/.psqlrc.aliases/admin/xidsinuse.sql`
 
+
 -- database
 \set  bloat               `cat ~/.psqlrc.aliases/database/bloat.sql`
+\set  bloat2              `cat ~/.psqlrc.aliases/database/bloat2.sql`
+\set  blocking            `cat ~/.psqlrc.aliases/database/blocking.sql`
+\set  cachehit            `cat ~/.psqlrc.aliases/database/cache_hit.sql`
+\set  indexsize           `cat ~/.psqlrc.aliases/database/index_size.sql`
+\set  indexusage          `cat ~/.psqlrc.aliases/database/index_usage.sql`
+\set  locks               `cat ~/.psqlrc.aliases/database/locks.sql`
+\set  longrunningqueries  `cat ~/.psqlrc.aliases/database/long_running_queries.sql`
+\set  recordsrank         `cat ~/.psqlrc.aliases/database/records_rank.sql`
+\set  totalindexsize      `cat ~/.psqlrc.aliases/database/total_index_size.sql`
+\set  vacuumstats         `cat ~/.psqlrc.aliases/database/vacuum_stats.sql`
+\set  vacuumstats2        `cat ~/.psqlrc.aliases/database/vacuum_stats2.sql`
 
 -- table
+\set  relationsize        `cat ~/.psqlrc.aliases/table/relationsize.sql`
 \set  rtsize              `cat ~/.psqlrc.aliases/table/rtsize.sql`
+\set  seqscans            `cat ~/.psqlrc.aliases/table/seq_scans.sql`
+\set  tableindexessize    `cat ~/.psqlrc.aliases/table/table_indexes_size.sql`
 \set  tablesize           `cat ~/.psqlrc.aliases/table/tablesize.sql`
+\set  totaltablesize      `cat ~/.psqlrc.aliases/table/total_table_size.sql`
 -- \set  tsize            `cat ~/.psqlrc.aliases/table/tsize.sql`
+\set  unusedindexes       `cat ~/.psqlrc.aliases/table/unused_indexes.sql`
 \set  uselesscol          `cat ~/.psqlrc.aliases/table/uselesscol.sql`
 
 
